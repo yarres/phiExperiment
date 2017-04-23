@@ -17,6 +17,7 @@ export class wellBeingComponent {
     this.pleasure.quantity = this.limitExperienceValue(pleasureQuantity);
     this.pleasure.quality = this.limitExperienceValue(pleasureQuality);
     this.qualityModfier = 2;
+    this.experienceLimitValue = 10;
     /* Without taking into account past experience we define the default level of
     * experience to be neutral.
     */
@@ -30,7 +31,9 @@ export class wellBeingComponent {
    */
   limitExperienceValue(experienceValue) {
     const tempExpValue = Math.abs(experienceValue);
-    return tempExpValue > 10 ? 10 : tempExpValue;
+    return tempExpValue > this.experienceLimitValue
+    ? this.experienceLimitValue
+    : tempExpValue;
   }
 
   /** An experience that doesn't increase pain nor pleasure doesn't affect the
@@ -63,9 +66,29 @@ export class wellBeingComponent {
   }
 }
 
+/**
+ * Some tests to assert the logic of the model.
+ */
+
+import { assert } from 'chai';
+// Create a new experience
+  describe('Experience', () => {
+    it('returned well-being value should be positive and equal to 1', () => {
+      const exp = new WellBeingComponent(0,1,1);
+      const wellBeingValue = exp.getWellBeingValue();
+      assert.equal(wellBeingValue, 1);
+    });
+    it('returned well-being value should be negative (more pain than pleasure) and equal to -4', () => {
+      const exp = new Experience(5,1,1);
+      const wellBeingValue = exp.getWellBeingValue();
+      assert.equal(wellBeingValue, -4);
+    });
+  });
+
+
 export default angular.module('phiExperimentApp.wellBeing', [])
   .component('wellBeing', {
-    template: '<h1>Hello {{ $ctrl.message }}</h1>',
+    template: '<h1>We {{ $ctrl.message }}</h1>',
     bindings: { message: '<' },
     controller: wellBeingComponent
   })
