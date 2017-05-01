@@ -17,7 +17,9 @@ class StateOfTheWorld {
    */
   constructor(potentialDesiresOfUser, needsOfUser, externalFacts) {
     this.potentialDesiresOfUser = potentialDesiresOfUser;
-    this.needsOfUser = needsOfUser;
+    if (this.haveBasicNeeds(needsOfUser)) {
+      this.needsOfUser = needsOfUser;
+    }
     this.externalFacts = externalFacts;
   }
 
@@ -43,17 +45,18 @@ class StateOfTheWorld {
     ];
 
     /**
-     * Set the needs of the user
+     * Checks that the needs the needs of the user
      * @param {Object} needs - An object with the needs of the user and their
      * value.
-     * In the following example a short, non exhaustive, list of needs is set
-     * for the user.
+     * The basic needs of object BASIC_NEEDS_DEFAULT must be present in the
+     * needs object.
      */
-    setNeeds(needs = BASIC_NEEDS_DEFAULT) {
+    haveBasicNeeds(needs = BASIC_NEEDS_DEFAULT) {
       // Loop on needs array
       if (has(needs, this.BASIC_NEEDS)) {
-        this.needsOfUser = needs;
+        return true;
       };
+      return false;
     }
 
     // TODO: faire la même chose pour le setter des desires (voir comment)
